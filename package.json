@@ -1,0 +1,13 @@
+{
+  "name": "teleforge",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node bot.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "grammy": "^1.35.0",
+    "zod": "^3.24.2"
+  }
+}

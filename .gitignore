@@ -1,0 +1,5 @@
+node_modules/
+user_images/
+.claude/
+.env
+.mcp_runtime.json

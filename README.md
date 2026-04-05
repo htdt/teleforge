@@ -1,3 +1,5 @@
+## ❗Deprecated — use [native Telegram plugin](https://code.claude.com/docs/en/channels)
+
 # Teleforge
 
 Run [Claude Code](https://docs.anthropic.com/en/docs/claude-code) sessions remotely through a Telegram bot. Designed for one-shot tasks on a headless VM — send a task, let the agent scaffold, build, and ship with minimal back-and-forth. The agent can ask follow-up questions and send images/videos mid-session via MCP tools.

@@ -1,0 +1,11 @@
+[project]
+name = "tg-send"
+version = "2.0.0"
+description = "Single-shot CLI for sending text plus an optional image or video to Telegram."
+requires-python = ">=3.10"
+
+[project.scripts]
+tg-send = "tg_send:main"
+
+[tool.setuptools]
+py-modules = ["tg_send"]

@@ -1,12 +1,16 @@
 # tg-send
 
-Single-shot CLI for sending text plus an optional image or video to Telegram.
+Python CLI for sending text plus an optional image or video to Telegram.
 
 There is no bot polling loop, no MCP bridge, and no long-running server, just simple one-way messages.
 
-## Setup
+## Install
 
-No runtime dependencies are required. Run it directly with Node, or use `npm link` if you want a `tg-send` command in your shell.
+```bash
+pip install --editable .
+```
+
+That exposes a `tg-send` command from the shared python environment.
 
 ## Environment
 
@@ -19,28 +23,10 @@ For a 1:1 bot chat, `TG_CHAT_ID` is your Telegram user id. For groups and channe
 
 ## Usage
 
-Send text only:
-
 ```bash
-TG_BOT_TOKEN=... TG_CHAT_ID=... node tg-send.mjs --text "build finished"
-```
-
-Send a file only:
-
-```bash
-TG_BOT_TOKEN=... TG_CHAT_ID=... node tg-send.mjs --file ./render.png
-```
-
-Send a file with caption text:
-
-```bash
-TG_BOT_TOKEN=... TG_CHAT_ID=... node tg-send.mjs --text "latest render" --file ./render.png
-```
-
-Executable script usage also works:
-
-```bash
-./tg-send.mjs --text "hello"
+tg-send --text "build finished"
+tg-send --file ./render.png
+tg-send --text "latest render" --file ./render.png
 ```
 
 ## Behavior
@@ -50,10 +36,4 @@ Executable script usage also works:
 - Supported image extensions: `.jpg`, `.jpeg`, `.png`, `.webp`
 - Supported video extensions: `.mp4`, `.mov`, `.m4v`, `.webm`, `.mkv`, `.avi`
 - If `--text` is longer than Telegram's media caption limit, the file is sent first and the text is sent as follow-up messages.
-
-## Install As Command
-
-```bash
-npm link
-tg-send --text "hello from telegram"
-```
+- The project has no runtime dependencies outside the Python standard library.

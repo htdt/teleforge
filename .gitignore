@@ -1,3 +1,6 @@
-node_modules/
 .claude/
-.env
+.codex
+src/*.egg-info
+*.egg-info/
+__pycache__/
+*.pyc

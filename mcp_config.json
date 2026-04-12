@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "telegram": {
-      "command": "node",
-      "args": ["mcp-server.mjs"]
-    }
-  }
-}

@@ -1,13 +1,12 @@
 {
-  "name": "teleforge",
-  "version": "1.0.0",
+  "name": "tg-send",
+  "version": "1.1.0",
   "type": "module",
-  "scripts": {
-    "start": "node bot.mjs"
+  "bin": {
+    "tg-send": "./tg-send.mjs"
   },
-  "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.12.1",
-    "grammy": "^1.35.0",
-    "zod": "^3.24.2"
+  "scripts": {
+    "start": "node tg-send.mjs",
+    "send": "node tg-send.mjs"
   }
 }

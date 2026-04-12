@@ -1,58 +1,59 @@
-## ❗Deprecated — use [native Telegram plugin](https://code.claude.com/docs/en/channels)
+# tg-send
 
-# Teleforge
+Single-shot CLI for sending text plus an optional image or video to Telegram.
 
-Run [Claude Code](https://docs.anthropic.com/en/docs/claude-code) sessions remotely through a Telegram bot. Designed for one-shot tasks on a headless VM — send a task, let the agent scaffold, build, and ship with minimal back-and-forth. The agent can ask follow-up questions and send images/videos mid-session via MCP tools.
-
-## Architecture
-
-- **bot.mjs** — Telegram bot (grammy) + internal TCP server. Receives tasks from Telegram, spawns `claude` CLI as a subprocess, streams results back.
-- **mcp-server.mjs** — MCP server that the agent loads as a tool provider. Bridges tool calls (`send_message`, `ask_user`, `send_image`) to the bot over a local TCP socket.
+There is no bot polling loop, no MCP bridge, and no long-running server, just simple one-way messages.
 
 ## Setup
 
-```bash
-npm install
-```
+No runtime dependencies are required. Run it directly with Node, or use `npm link` if you want a `tg-send` command in your shell.
 
-### Environment variables
+## Environment
 
-| Variable | Required | Default | Description |
-|---|---|---|---|
-| `TG_BOT_TOKEN` | yes | — | Telegram bot token from [@BotFather](https://t.me/BotFather) |
-| `TG_USER_ID` | yes | — | Your numeric Telegram user ID. Only this user can interact with the bot. |
-| `SCAFFOLD_DIR` | no | `./scaffold` | Template directory copied into each session. Contains `CLAUDE.md`. |
-| `SESSIONS_DIR` | no | `~/.teleforge/sessions` | Where per-session working directories are created. |
-| `IMAGES_DIR` | no | `~/.teleforge/images` | Where images received from Telegram are saved. |
+| Variable | Required | Description |
+|---|---|---|
+| `TG_BOT_TOKEN` | yes | Telegram bot token from [@BotFather](https://t.me/BotFather) |
+| `TG_CHAT_ID` | yes | Target chat ID or `@channelusername` |
 
-Set them however you prefer (shell export, `.env` file with a loader, systemd unit, etc).
+For a 1:1 bot chat, `TG_CHAT_ID` is your Telegram user id. For groups and channels, use the actual chat id instead.
 
-### Run
+## Usage
+
+Send text only:
 
 ```bash
-TG_BOT_TOKEN=... TG_USER_ID=... npm start
+TG_BOT_TOKEN=... TG_CHAT_ID=... node tg-send.mjs --text "build finished"
 ```
 
-## Commands
+Send a file only:
 
-### Model override
+```bash
+TG_BOT_TOKEN=... TG_CHAT_ID=... node tg-send.mjs --file ./render.png
+```
 
-Start your message with `model <model-id>` (optionally followed by a newline) to override the Claude model for that session. The prefix is stripped from the task text.
+Send a file with caption text:
 
-Example: `model claude-sonnet-4-5-20250514` followed by your task.
+```bash
+TG_BOT_TOKEN=... TG_CHAT_ID=... node tg-send.mjs --text "latest render" --file ./render.png
+```
 
-### Reply to resume
+Executable script usage also works:
 
-Reply to a `Done [sessionId]...` or `Killed [sessionId].` message with a new task to resume that session — restores the working directory **and** the Claude conversation history, so the agent has full context from previous turns.
+```bash
+./tg-send.mjs --text "hello"
+```
 
-The quoted part of the message is stripped so it doesn't confuse the agent.
+## Behavior
 
-### `shutdown`
+- At least one of `--text` or `--file` is required.
+- If `--file` is present, the tool auto-detects image vs video from the file extension.
+- Supported image extensions: `.jpg`, `.jpeg`, `.png`, `.webp`
+- Supported video extensions: `.mp4`, `.mov`, `.m4v`, `.webm`, `.mkv`, `.avi`
+- If `--text` is longer than Telegram's media caption limit, the file is sent first and the text is sent as follow-up messages.
 
-Kill the currently running session immediately. The session directory is kept — reply to the `Killed` message to resume it later.
+## Install As Command
 
-## Security note
-
-The bot spawns Claude Code with `--dangerously-skip-permissions`. This flag disables all interactive permission prompts so the agent can execute tools autonomously (file edits, shell commands, etc.) without manual approval.
-
-**This means the agent has unrestricted access to your machine.** Only run this in an environment you're comfortable with (a container, a VM, a dedicated dev machine). Do not expose the bot to untrusted Telegram users — `TG_USER_ID` restricts access to a single account, but the underlying session has no guardrails.
+```bash
+npm link
+tg-send --text "hello from telegram"
+```

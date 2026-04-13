@@ -1,13 +1,14 @@
 [build-system]
 requires = ["setuptools>=68"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "tg-send"
 version = "2.0.0"
 description = "Single-shot CLI for sending text plus an optional image or video to Telegram."
 readme = "README.md"
-license = { file = "LICENSE.md" }
+license = "MIT"
+license-files = ["LICENSE.md"]
 requires-python = ">=3.10"
 authors = [{ name = "Alex Ermolov", email = "alex@ermolov.space" }]
 dependencies = []
@@ -16,7 +17,6 @@ classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",

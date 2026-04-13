@@ -3,7 +3,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "tg-send"
+name = "tg-send-cli"
 version = "2.0.0"
 description = "Single-shot CLI for sending text plus an optional image or video to Telegram."
 readme = "README.md"

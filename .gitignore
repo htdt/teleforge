@@ -1,6 +1,4 @@
-.claude/
-.codex
-src/*.egg-info
+dist/
+build/
 *.egg-info/
 __pycache__/
-*.pyc

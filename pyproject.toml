@@ -26,11 +26,11 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/htdt/tg-send"
-Issues = "https://github.com/htdt/tg-send/issues"
+Homepage = "https://github.com/htdt/tg-push"
+Issues = "https://github.com/htdt/tg-push/issues"
 
 [project.scripts]
-tg-send = "tg_send:main"
+tg-push = "tg_push:main"
 
 [tool.setuptools]
-py-modules = ["tg_send"]
+py-modules = ["tg_push"]

@@ -71,9 +71,9 @@ def usage(program_name: str) -> str:
 
 def resolve_program_name(raw_program_name: str) -> str:
     program_name = Path(raw_program_name).name
-    if program_name == "tg_send.py":
-        return "python3 -m tg_send"
-    return program_name or "tg-send"
+    if program_name == "tg_push.py":
+        return "python3 -m tg_push"
+    return program_name or "tg-push"
 
 
 def parse_args(argv: list[str], program_name: str) -> Args:

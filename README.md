@@ -1,4 +1,4 @@
-# tg-send
+# tg-push
 
 Python CLI for sending text plus an optional image or video to Telegram.
 
@@ -7,13 +7,13 @@ There is no bot polling loop, no MCP bridge, and no long-running server, just si
 ## Install
 
 ```bash
-pip install tg-send
+pip install tg-push
 ```
 
 Or with [pipx](https://pipx.pypa.io) for an isolated install:
 
 ```bash
-pipx install tg-send
+pipx install tg-push
 ```
 
 ## Environment
@@ -28,9 +28,9 @@ For a 1:1 bot chat, `TG_CHAT_ID` is your Telegram user id. For groups and channe
 ## Usage
 
 ```bash
-tg-send --text "build finished"
-tg-send --file ./render.png
-tg-send --text "latest render" --file ./render.png
+tg-push --text "build finished"
+tg-push --file ./render.png
+tg-push --text "latest render" --file ./render.png
 ```
 
 ## Behavior

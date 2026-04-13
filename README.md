@@ -7,10 +7,14 @@ There is no bot polling loop, no MCP bridge, and no long-running server, just si
 ## Install
 
 ```bash
-pip install --editable .
+pip install tg-send
 ```
 
-That exposes a `tg-send` command from the shared python environment.
+Or with [pipx](https://pipx.pypa.io) for an isolated install:
+
+```bash
+pipx install tg-send
+```
 
 ## Environment
 

@@ -110,9 +110,18 @@ def get_config() -> Config:
     chat_id = os.getenv("TG_CHAT_ID")
 
     if not token:
-        raise CliError("TG_BOT_TOKEN is required.")
+        raise CliError(
+            "TG_BOT_TOKEN is not set.\n"
+            "Get a token from @BotFather on Telegram: https://t.me/BotFather\n"
+            "Then set it: export TG_BOT_TOKEN=<your-token>"
+        )
     if not chat_id:
-        raise CliError("TG_CHAT_ID is required.")
+        raise CliError(
+            "TG_CHAT_ID is not set.\n"
+            "For a 1:1 bot chat, use your Telegram user ID (send /start to @userinfobot to find it).\n"
+            "For a group or channel, use its numeric ID or @username.\n"
+            "Then set it: export TG_CHAT_ID=<your-chat-id>"
+        )
 
     return Config(token=token, chat_id=chat_id)
 
@@ -177,8 +186,12 @@ def telegram_request(
         ) from error
 
     if status >= 400 or not payload.get("ok"):
-        description = payload.get("description")
-        raise CliError(description or f"Telegram API request failed with status {status}")
+        description = payload.get("description", f"Telegram API request failed with status {status}")
+        if status == 401:
+            description += "\nCheck that TG_BOT_TOKEN is correct (get one from @BotFather)."
+        elif status == 400 and "chat not found" in (description or "").lower():
+            description += "\nCheck that TG_CHAT_ID is correct."
+        raise CliError(description)
 
     return payload.get("result")
 

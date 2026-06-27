@@ -1,6 +1,6 @@
 # tg-push
 
-Python CLI for sending text plus an optional image or video to Telegram.
+Python CLI for sending text plus an optional file to Telegram.
 
 There is no bot polling loop, no MCP bridge, and no long-running server, just simple one-way messages.
 
@@ -31,12 +31,14 @@ For a 1:1 bot chat, `TG_CHAT_ID` is your Telegram user id. For groups and channe
 tg-push --text "build finished"
 tg-push --file ./render.png
 tg-push --text "latest render" --file ./render.png
+tg-push --text "report" --file ./report.pdf
 ```
 
 ## Behavior
 
 - At least one of `--text` or `--file` is required.
-- If `--file` is present, the tool auto-detects image vs video from the file extension.
+- If `--file` is present, recognized images and videos are sent as Telegram media.
+- Other files are sent as documents, so PDFs, archives, and extensionless files work.
 - Supported image extensions: `.jpg`, `.jpeg`, `.png`, `.webp`
 - Supported video extensions: `.mp4`, `.mov`, `.m4v`, `.webm`, `.mkv`, `.avi`
 - If `--text` is longer than Telegram's media caption limit, the file is sent first and the text is sent as follow-up messages.

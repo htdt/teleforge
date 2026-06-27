@@ -56,6 +56,7 @@ def usage(program_name: str) -> str:
             f"  {program_name} --text \"hello\"",
             f"  {program_name} --file ./image.png",
             f"  {program_name} --text \"caption\" --file ./video.mp4",
+            f"  {program_name} --text \"report\" --file ./report.pdf",
             "",
             "Environment:",
             "  TG_BOT_TOKEN   Telegram bot token (required)",
@@ -63,7 +64,8 @@ def usage(program_name: str) -> str:
             "",
             "Notes:",
             "  - At least one of --text or --file is required.",
-            "  - --file is auto-detected as image or video from its extension.",
+            "  - Images and videos are sent as Telegram media when the extension is recognized.",
+            "  - Other files are sent as documents, so PDFs, archives, and extensionless files work.",
             "  - If --text is too long for a media caption, the file is sent first and the text is sent as follow-up messages.",
         ]
     )
@@ -133,11 +135,7 @@ def detect_media_type(file_path: Path) -> tuple[str, str]:
     if extension in VIDEO_EXTENSIONS:
         return ("sendVideo", "video")
 
-    raise CliError(
-        f"Unsupported file type: {extension or '(no extension)'}\n"
-        "Supported image extensions: .jpg, .jpeg, .png, .webp\n"
-        "Supported video extensions: .mp4, .mov, .m4v, .webm, .mkv, .avi"
-    )
+    return ("sendDocument", "document")
 
 
 def telegram_request(

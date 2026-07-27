@@ -42,4 +42,5 @@ tg-push --text "report" --file ./report.pdf
 - Supported image extensions: `.jpg`, `.jpeg`, `.png`, `.webp`
 - Supported video extensions: `.mp4`, `.mov`, `.m4v`, `.webm`, `.mkv`, `.avi`
 - If `--text` is longer than Telegram's media caption limit, the file is sent first and the text is sent as follow-up messages.
+- On success a one-line confirmation is printed to stdout, for example `Sent report.pdf (document) to @mychannel`. Errors go to stderr with exit code 1.
 - The project has no runtime dependencies outside the Python standard library.

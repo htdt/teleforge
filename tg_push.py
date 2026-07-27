@@ -194,10 +194,11 @@ def telegram_request(
     return payload.get("result")
 
 
-def send_text(token: str, chat_id: str, text: str) -> None:
+def send_text(token: str, chat_id: str, text: str) -> int:
     if not text:
-        return
+        return 0
 
+    sent = 0
     for start in range(0, len(text), TEXT_LIMIT):
         telegram_request(
             token,
@@ -207,6 +208,9 @@ def send_text(token: str, chat_id: str, text: str) -> None:
                 "text": text[start : start + TEXT_LIMIT],
             },
         )
+        sent += 1
+
+    return sent
 
 
 def build_multipart_form(
@@ -242,7 +246,7 @@ def build_multipart_form(
     return bytes(body), boundary
 
 
-def send_file(token: str, chat_id: str, file_name: str, text: str) -> None:
+def send_file(token: str, chat_id: str, file_name: str, text: str) -> tuple[str, int]:
     file_path = Path(file_name).expanduser()
 
     if not file_path.exists():
@@ -270,8 +274,23 @@ def send_file(token: str, chat_id: str, file_name: str, text: str) -> None:
         content_type=f"multipart/form-data; boundary={boundary}",
     )
 
+    follow_up_count = 0
     if text and not caption:
-        send_text(token, chat_id, text)
+        follow_up_count = send_text(token, chat_id, text)
+
+    return f"{file_path.name} ({field})", follow_up_count
+
+
+def describe_delivery(chat_id: str, file_label: str, message_count: int) -> str:
+    parts = []
+    if file_label:
+        parts.append(file_label)
+    if message_count == 1:
+        parts.append("1 message")
+    elif message_count > 1:
+        parts.append(f"{message_count} messages")
+
+    return f"Sent {' + '.join(parts)} to {chat_id}"
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -291,10 +310,14 @@ def main(argv: list[str] | None = None) -> int:
 
         config = get_config()
         if args.file:
-            send_file(config.token, config.chat_id, args.file, args.text)
-            return 0
+            file_label, message_count = send_file(
+                config.token, config.chat_id, args.file, args.text
+            )
+        else:
+            file_label = ""
+            message_count = send_text(config.token, config.chat_id, args.text)
 
-        send_text(config.token, config.chat_id, args.text)
+        print(describe_delivery(config.chat_id, file_label, message_count))
         return 0
     except CliError as error:
         print(str(error), file=sys.stderr)
